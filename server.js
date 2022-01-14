@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is d
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Service application." });
+  res.json({ message: "Welcome to Service application with auto Triggers." });
 });
 
 require("./app/routes/providers.routes")(app);
