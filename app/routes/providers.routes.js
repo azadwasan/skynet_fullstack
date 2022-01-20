@@ -9,19 +9,5 @@ module.exports = app =>{
     //Retrieve all tutorials
     router.get("/", provider.findAll);
 
-    app.use('/api/provider', router);
+    app.use('/api/providers', router);
 };
-
-
-/*Router.get("/", (req, res)=>{
-    mysqlConnection.query("SELECT * from service.provider", (err, rows, fields)=>{
-        if(!err){
-            res.send(rows);
-        }
-        else{
-            console.log("Database, data retrieval error!");
-        }
-    })
-})*/
-
-//module.exports = Router;
