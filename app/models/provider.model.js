@@ -1,92 +1,46 @@
 const res = require("express/lib/response");
 const sqlConnection = require("../models/db");
+const queries = require('./queries');
 
-const ProviderAbstract = function(){
-    //Constructor for Provider object
-    this.firstName;
-    this.lastName;
-    this.middleName;
-    this.workRadius;
-    this.status;
-    this.cnic;
-    this.userName;
-    this.dateOfBirth;
-    this.photo;
-    this.phoneNumber1;
-    this.phoneNumber2;
-    this.briefDescription;
-    this.detailedDescription;
+ function objectCopier(source, destination){
+    for(let i in source){
+        destination[i] = source[i];
+    }
 };
 
 //Constructor for Provider object
-const Provider = function(provider){
-    // this = new ProviderAbstract();
-    this.firstName              = null;
-    this.lastName               = null;
-    this.middleName             = null;
-    this.workRadius             = null;
-    this.status                 = null;
-    this.cnic                   = null;
-    this.userName               = null;
-    this.dateOfBirth            = null;
-    this.photo                  = null;
-    this.phoneNumber1           = null;
-    this.phoneNumber2           = null;
-    this.briefDescription       = null;
-    this.detailedDescription    = null;
-
-    console.log(this);
-    for(let i in provider){
-        this[i] = provider[i];
-    }
-    console.log(this);
+const Providers = function(bodyData){
+        this.firstName              = bodyData.firstName
+        this.lastName               = bodyData.lastName
+        this.middleName             = bodyData.middleName
+        this.workRadius             = bodyData.workRadius
+        this.status                 = bodyData.status
+        this.cnic                   = bodyData.cnic
+        this.userName               = bodyData.userName
+        this.dateOfBirth            = bodyData.dateOfBirth
+        this.photo                  = bodyData.photo
+        this.phoneNumber1           = bodyData.phoneNumber1
+        this.phoneNumber2           = bodyData.phoneNumber2
+        this.briefDescription       = bodyData.briefDescription
+        this.detailedDescription    = bodyData.detailedDescription
 };
 
-const ProviderAddress = function(ProviderAddress){
-    this.type = ProviderAddress.type;
-    this.addressRow1 = ProviderAddress.addressRow1;
-    this.addressRow2 = ProviderAddress.addressRow2;
-    this.addressRow3 = ProviderAddress.addressRow3;
-    this.postalCode = ProviderAddress.postalCode;
-    this.city = ProviderAddress.city;
-    this.state = ProviderAddress.state;
-    this.country = ProviderAddress.country;
+const ProviderAddress = function(bodyData){
+    this.type           = bodyData.type,
+    this.addressRow1    = bodyData.addressRow1,
+    this.addressRow2    = bodyData.addressRow2,
+    this.addressRow3    = bodyData.addressRow3,
+    this.postalCode     = bodyData.postalCode,
+    this.latitude       = bodyData.latitutde,
+    this.longitude      = bodyData.longitude,
+    this.city           = bodyData.city,
+    this.state          = bodyData.state,
+    this.country        = bodyData.country
 };
 
-Provider.create = (newProvider, result) =>{
-
-    var sqlQryStr = `INSERT INTO 
-        service.provider(
-            first_name,
-            last_name,
-            middle_name,
-            work_radius,
-            status,
-            cnic,
-            username,
-            date_of_birth,
-            photo,
-            phone_number_1,
-            phone_number_2,
-            brief_description,
-            detailed_description
-            )
-    VALUES (?, ?, ?, IFNULL(?,DEFAULT(work_radius)), IFNULL(?,DEFAULT(status)), ?, ?, ?, IFNULL(?,DEFAULT(photo)), ?, IFNULL(?,DEFAULT(phone_number_2)), ?, IFNULL(?,DEFAULT(detailed_description)));`;
-
-/*    var qry = sqlConnection.query(sqlQryStr,
-        Object.values(newProvider),
-        (err, res)=>{
-            if(err){
-                console.log("Error:", err);
-                result(err, null);
-                return;
-            }
-            result(null, {id: res.insertedId, ...newProvider});
-        }
-    );
-    */
+Providers.create = (newProvider, providerAddress, result) =>{
+   const sqlQryStr = queries['insertProvider'];
    sendQuery(newProvider, sqlQryStr, result);
-//    console.log(qry.sql);
 };
 
 function sendQuery(obj, qryStr, result){
@@ -103,7 +57,7 @@ function sendQuery(obj, qryStr, result){
     );
 }
 
-Provider.getAll = (firstName, result)=>{
+Providers.getAll = (firstName, result)=>{
     var query = "SELECT * from provider";
 
  /*  if(firstName){
@@ -121,4 +75,4 @@ Provider.getAll = (firstName, result)=>{
     });
 };
 
-module.exports = {Provider, ProviderAddress};
+module.exports = {Providers, ProviderAddress};
