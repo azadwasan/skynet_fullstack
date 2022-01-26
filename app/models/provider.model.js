@@ -42,75 +42,43 @@ const ProviderAddress = function(bodyData){
     this.country        = bodyData.country
 };
 
-Providers.create = (newProvider, providerAddress, result) =>{
+Providers.create = async (newProvider, providerAddress, result) =>{
+    try{
+        await sqlConnection.query(queries['startTransaction']);
+        var [rows, fields] = await sqlConnection.query(queries['insertProvider'], Object.values(newProvider));
+        providerAddress.providerId = rows.insertId;
+        [rows, fields] = await sqlConnection.query(queries['insertCity'], [providerAddress.city]);
+        [rows, fields] = await sqlConnection.query(queries['insertState'], [providerAddress.state]);
+        [rows, fields] = await sqlConnection.query(queries['insertCountry'], [providerAddress.country]);
+        [rows, fields] = await sqlConnection.query(queries['insertAddress'], Object.values(providerAddress));
+        await sqlConnection.query(queries['commit']);
 
-    var sqlQryStr = queries['insertProvider'];
-
-    var resultProvider = (err, data)=>{
-        if(err){
-            console.log("************ Error ************** :", err);
-            result(err, null);
-            return;
-        }
-
-        result(null, data);
-
-        providerAddress.providerId = data['id'];
- 
-        console.log(providerAddress);
-
-        var resultNull = (err, data)=>{
-        }
-
-        sqlQryStr = queries['insertCity'];
-        sendQuery(providerAddress.city, sqlQryStr, resultNull);
-        
-        sqlQryStr = queries['insertState'];
-        sendQuery(providerAddress.state, sqlQryStr, resultNull);
-        
-        sqlQryStr = queries['insertCountry'];
-        sendQuery(providerAddress.country, sqlQryStr, resultNull);
-
-        sqlQryStr = queries['insertAddress'];
-        sendQuery(Object.values(providerAddress), sqlQryStr, resultNull);
-    };
-
-    providerId = sendQuery(Object.values(newProvider), sqlQryStr, resultProvider);
-
+        result(null, {id: rows.insertId});
+    }
+    catch(err){
+        console.log("***** ERROR OCCURED ***** ");
+        console.log(err);
+        await sqlConnection.query(queries['rollback']);
+        result(err, null);
+    }
 };
 
-function sendQuery(obj, qryStr, result){
-    sqlConnection.query(qryStr,
-        obj,
-        (err, res)=>{
-            if(err){
-                console.log("Error:", err);
-                result(err, null);
-                return;
-            }
-            result(null, {id: res.insertId, ...obj});
-            console.log("Inserted Id = " + res.insertId);
-        }
-    );
-}
 
-Providers.getAll = (firstName, result)=>{
+Providers.getAll = async (firstName, result)=>{
     var query = "SELECT * from provider";
 
  /*  if(firstName){
         query += `WHERE first_name LIKE '%${firstName}%`;
     }
 */
-
-    sqlConnection.query(query, (err, res)=>{
-        if(err){
-            console.log("Error: ", err);
-            result (null, err);
-            return;
-        }
-        //console.log("Providers : ", res);
-        result(null, res);
-    });
+    try{
+        [rows, fields] = await sqlConnection.query(queries['selectAllProviders']);
+        result(null, rows);
+    }
+    catch(err){
+        result(err, null);
+        console.log(err);
+    }
 };
 
 module.exports = {Providers, ProviderAddress};

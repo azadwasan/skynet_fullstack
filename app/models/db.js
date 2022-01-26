@@ -1,4 +1,4 @@
-const mySQL = require("mysql");
+const mySQL = require("mysql2/promise");
 const dbConfig = require("../config/db.config");
 
 /*const connection = async config => {
@@ -28,7 +28,7 @@ const dbConfig = require("../config/db.config");
 });
 };*/
 
-const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
+/*const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
 var config;
 
 var connection = mySQL.createPool({
@@ -39,14 +39,15 @@ var connection = mySQL.createPool({
     socketPath: `${dbSocketPath}/${process.env.INSTANCE_CONNECTION_NAME}`
     , ...config,
     });
+*/
 
-/*
-var connection = mySQL.createPool({
+var connectionPool = mySQL.createPool({
     host : dbConfig.HOST,
     user : dbConfig.USER,
     password : dbConfig.PASSWORD,
     database : dbConfig.DATABASE,
     multipleStatements: dbConfig.MULTIPLESTATEMENTS
-});*/
+  });
+// const promisePool = connectionPool.promise();
 
-module.exports = connection;
+module.exports = connectionPool;
