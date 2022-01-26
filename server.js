@@ -1,5 +1,6 @@
 const express = require("express");
 const ProvidersRoutes = require("./app/routes/providers.routes")
+const ServiceRoutes = require("./app/routes/services.routes")
 
 // const bodyParser = require("body-parser"); /* deprecated */
 const cors = require("cors");
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/providers.routes")(app);
+require("./app/routes/services.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
