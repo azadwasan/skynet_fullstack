@@ -1,4 +1,7 @@
 var queries = {
+    startTransaction: `START TRANSACTION;`,
+    commit:         `COMMIT;`,
+    rollback:       `ROLLBACK;`,
     insertProvider: `INSERT INTO 
                     service.provider
                     (first_name, last_name, middle_name, work_radius, status, cnic, username, date_of_birth, photo, phone_number_1, phone_number_2, brief_description, detailed_description)
@@ -13,5 +16,6 @@ var queries = {
                     (SELECT city.id FROM service.city WHERE city.city=?),
                     (SELECT state.id FROM service.state WHERE state.state=?),
                     (SELECT country.id FROM service.country WHERE country.country=?));`,
+    selectAllProviders: `SELECT * from provider;`
 };
 module.exports = queries;
