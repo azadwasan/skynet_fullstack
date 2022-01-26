@@ -9,7 +9,6 @@ exports.create = (req, res) =>{
         });
     }
 
-    console.log(req.body);
 
     const provider = new Providers(req.body);
     const providerAddress = new ProviderAddress(req.body);
