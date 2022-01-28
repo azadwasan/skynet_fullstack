@@ -63,7 +63,7 @@ exports.findOne = (req, res) =>{
     });
 };
 
-exports.findOneReview = (req, res) =>{
+exports.findReviews = (req, res) =>{
     console.log("Retrieving review for provider id = " + req.params.id);
 
     Providers.findReviewById(req.params.id, (err, data)=>{
