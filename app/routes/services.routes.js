@@ -3,7 +3,6 @@ module.exports = app =>{
 
     var router = require("express").Router();
 
-    
     //Create a new Service
     router.post("/", services.create);
 
