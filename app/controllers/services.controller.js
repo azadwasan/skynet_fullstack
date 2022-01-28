@@ -26,8 +26,7 @@ exports.create = (req, res) =>{
 //Retrieve all services from teh database
 
 exports.findAll = (req, res) =>{
-    console.log(Services);
-    Services.getAll((err, data) =>{
+   Services.getAll((err, data) =>{
         if(err){
             res.status(500).send({
                 message: err.message || "Some error occured while retrieving services."
