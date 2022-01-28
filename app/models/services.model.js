@@ -1,5 +1,3 @@
-const res = require("express/lib/response");
-const { NULL } = require("mysql/lib/protocol/constants/types");
 const sqlConnection = require("./db");
 const queries = require('./queries');
 
@@ -8,9 +6,9 @@ const Services = function(bodyData){
     this.service = bodyData.service
 };
 
-Services.create = async (service, result) =>{
+Services.create = async ({service}, result) =>{
     try{
-        var [rows, fields] = await sqlConnection.query(queries['insertServices'], [service]);
+        var [rows, fields] = await sqlConnection.query(queries['insertServices'], service);
         result(null, {id: rows.insertId});
     }
     catch(err){
