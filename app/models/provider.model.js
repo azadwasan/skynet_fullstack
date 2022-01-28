@@ -42,8 +42,18 @@ const ProviderAddress = function(bodyData){
     this.country        = bodyData.country
 };
 
+const ProviderReview = function(bodyData){
+    this.providerId     = null,
+    this.overall        = bodyData.overall,
+    this.behavior       = bodyData.behavior,
+    this.time           = bodyData.time,
+    this.service        = bodyData.service,
+    this.review         = bodyData.review
+};
+
 Providers.create = async (newProvider, providerAddress, result) =>{
     try{
+        console.log("*** Adding a new provider and address **** ");
         await sqlConnection.query(queries['startTransaction']);
         var [rows, fields] = await sqlConnection.query(queries['insertProvider'], Object.values(newProvider));
         providerAddress.providerId = rows.insertId;
@@ -65,12 +75,6 @@ Providers.create = async (newProvider, providerAddress, result) =>{
 
 
 Providers.getAll = async (firstName, result)=>{
-    var query = "SELECT * from provider";
-
- /*  if(firstName){
-        query += `WHERE first_name LIKE '%${firstName}%`;
-    }
-*/
     try{
         [rows, fields] = await sqlConnection.query(queries['selectAllProviders']);
         result(null, rows);
@@ -78,6 +82,45 @@ Providers.getAll = async (firstName, result)=>{
     catch(err){
         result(err, null);
         console.log(err);
+    }
+};
+
+Providers.findById = async (id, result) =>{
+    try{
+        [rows, fields] = await sqlConnection.query(queries['findProviderById'], id);
+        result(null, rows);
+    }
+    catch(err){
+        result(err, null);
+        console.log(err);
+    }
+};
+
+Providers.findReviewById = async(id, result) =>{
+    try{
+        [rows, fields] = await sqlConnection.query(queries['findReviewById'], id);
+        result(null, rows);
+    }
+    catch(err){
+        result(err, null);
+        console.log(err);
+    }
+};
+
+Providers.createReview = async (id, reqBody, result) =>{
+    const newReview = new ProviderReview(reqBody);
+    newReview.providerId = id;
+
+    try{
+        console.log("*** Adding a new provider and address **** ");
+        var [rows, fields] = await sqlConnection.query(queries['createReview'], Object.values(newReview));
+        result(null, {id: rows.insertId});
+    }
+    catch(err){
+        console.log("***** ERROR OCCURED ***** ");
+        console.log(err);
+        await sqlConnection.query(queries['rollback']);
+        result(err, null);
     }
 };
 
