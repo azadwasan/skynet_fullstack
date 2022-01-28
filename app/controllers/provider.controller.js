@@ -42,3 +42,67 @@ exports.findAll = (req, res) =>{
         }
     });
 };
+
+exports.findOne = (req, res) =>{
+    Providers.findById(req.params.id, (err, data) =>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                message: `Not found Provider with id ${req.params.id}.`
+              });
+            } 
+            else {
+              res.status(500).send({
+                message: "Error retrieving Tutorial with id " + req.params.id
+              });
+            }
+        } 
+        else{
+            res.send(data);
+        } 
+    });
+};
+
+exports.findOneReview = (req, res) =>{
+    console.log("Retrieving review for provider id = " + req.params.id);
+
+    Providers.findReviewById(req.params.id, (err, data)=>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                message: `Review not found for Provider with id ${req.params.id}.`
+              });
+            } 
+            else {
+              res.status(500).send({
+                message: "Error retrieving review for provider with id " + req.params.id
+              });
+            }
+        } 
+        else{
+            res.send(data);
+        }
+    });
+};
+
+exports.createReview = (req, res) => {
+    console.log("Creating review for provider id = " + req.params.id);
+
+    Providers.createReview(req.params.id, req.body, (err, data)=>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                message: `Review not found for Provider with id ${req.params.id}.`
+              });
+            } 
+            else {
+              res.status(500).send({
+                message: "Error retrieving review for provider with id " + req.params.id
+              });
+            }
+        } 
+        else{
+            res.send(data);
+        }
+    });
+};
