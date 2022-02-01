@@ -106,3 +106,91 @@ exports.createReview = (req, res) => {
         }
     });
 };
+
+exports.findServices = (req, res) =>{
+    console.log("Retrieving services for provider id = " + req.params.idProvider);
+
+    Providers.findServices(req.params.idProvider, (err, data)=>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                message: `Service not found for Provider with id ${req.params.idProvider}.`
+              });
+            } 
+            else {
+              res.status(500).send({
+                message: "Error retrieving Service for provider with id " + req.params.idProvider
+              });
+            }
+        } 
+        else{
+            res.send(data);
+        }
+    });
+};
+
+exports.createService = (req, res) => {
+    console.log("Creating Service for provider id = " + req.params.idProvider);
+
+    Providers.createService(req.params.idProvider, req.body, (err, data)=>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    message: `Service not found for Provider with id ${req.params.idProvider}.` 
+                });
+            } 
+            else {
+              res.status(500).send({
+                message: "Error retrieving service for provider with id " + req.params.idProvider 
+              });
+            }
+        } 
+        else{
+            res.send(data);
+        }
+    });
+};
+
+exports.findDocuments = (req, res) =>{
+    console.log("Retrieving documents for provider id = " + req.params.idProvider + ", service id = " + req.params.idService);
+
+    Providers.findDocuments(req.params.idProvider, req.params.idService, (err, data)=>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                message: `Service not found for Provider with id ${req.params.idProvider} and service with id = ${req.params.idService}.`
+              });
+            } 
+            else {
+              res.status(500).send({
+                message: "Error retrieving service for provider with id " + req.params.idProvider + ", service id = " + req.params.idService
+              });
+            }
+        }
+        else{
+            res.send(data);
+        }
+    });
+};
+
+exports.createDocuments = (req, res) => {
+    console.log("Creating document for provider id = " + req.params.idProvider + ", service id = " + req.params.idService);
+
+    Providers.createDocuments(req.params.idProvider, req.params.idService,  req.body, (err, data)=>{
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    message: `Service not found for Provider with id ${req.params.idProvider} and service with id = ${req.params.idService}.`
+                });
+            } 
+            else {
+              res.status(500).send({
+                message: `Error retrieving Provider with id ${req.params.idProvider} and service with id = ${req.params.idService}.`
+              });
+            }
+        } 
+        else{
+            res.send(data);
+        }
+    });
+};
