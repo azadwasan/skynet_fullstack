@@ -14,5 +14,12 @@ module.exports = app =>{
     router.get("/:id/reviews", provider.findReviews);
     router.post("/:id/reviews", provider.createReview);
 
+    router.get("/:idProvider/services", provider.findServices);
+    router.post("/:idProvider/services", provider.createService);
+
+    router.get("/:idProvider/services/:idService/documents", provider.findDocuments);
+    router.get("/:idProvider/services/documents", provider.findDocuments);
+    router.post("/:idProvider/services/:idService/documents", provider.createDocuments);
+
     app.use('/api/providers', router);
 };

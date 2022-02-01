@@ -26,6 +26,19 @@ var queries = {
                         WHERE provider.id=?;`,
     findReviewById: `SELECT * FROM service.provider_review WHERE provider_review.provider_id=?;`,
     createReview: `INSERT INTO service.provider_review (provider_id, overall, behavior, time, service, review) VALUES (?, ?, ?, ?, ?, ?);`,
+    findServiceByProviderId: `SELECT * FROM service.provider_services WHERE service.provider_services.provider_id=?;`,
+    createService: `INSERT INTO service.provider_services (provider_id, service_id, experience, status) VALUES (?, ?, ?, ?);`,
+    findDocumentsByProviderId: `SELECT service.provider_services.*
+                                            , service.services_list.*
+                                            , service.qualification_documents.*
+                                        FROM 	service.provider_services
+                                        JOIN 	service.services_list ON service.provider_services.service_id=service.services_list.id
+                                        JOIN 	service.qualification_documents ON service.provider_services.id = service.qualification_documents.provider_service_id	
+                                        WHERE service.provider_services.provider_id = ? 
+                                        ;`,
+    findDocumentServiceAppend: `AND	service.provider_services.service_id = ?;`,
+    createProviderServiceDocument: `INSERT 	INTO service.qualification_documents (provider_service_id, document, document_name) 
+                                    VALUES ((SELECT service.provider_services.id FROM service.provider_services WHERE service.provider_services.provider_id=? AND service.provider_services.service_id=?), ?, ?);`,
 
     insertServices: `INSERT INTO service.services_list (service) VALUES (?);`,
     selectAllServices: `SELECT * FROM service.services_list;`,

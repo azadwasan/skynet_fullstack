@@ -51,6 +51,20 @@ const ProviderReview = function(bodyData){
     this.review         = bodyData.review
 };
 
+const ProviderService = function(bodyData){
+    this.providerId = bodyData.providerId,
+    this.serviceId  = bodyData.serviceId,
+    this.experience = bodyData.experience,
+    this.status     = bodyData.status
+};
+
+const ProviderDocument = function(bodyData){
+    this.providerId         = null,
+    this.providerServiceId  = null,
+    this.document           = bodyData.document,
+    this.documentName      = bodyData.documentName
+};
+
 Providers.create = async (newProvider, providerAddress, result) =>{
     try{
         console.log("*** Adding a new provider and address **** ");
@@ -119,7 +133,69 @@ Providers.createReview = async (id, reqBody, result) =>{
     catch(err){
         console.log("***** ERROR OCCURED ***** ");
         console.log(err);
-        await sqlConnection.query(queries['rollback']);
+        result(err, null);
+    }
+};
+
+Providers.findServices = async (idProvider, result) =>{
+    try{
+        [rows, fields] = await sqlConnection.query(queries['findServiceByProviderId'], idProvider);
+        result(null, rows);
+    }
+    catch(err){
+        result(err, null);
+        console.log(err);
+    }
+};
+
+Providers.createService = async (idProvider, reqBody, result) =>{
+    const newService = new ProviderService(reqBody);
+    newService.providerId = idProvider;
+
+    try{
+        console.log("*** Adding a new provider and address **** ");
+        var [rows, fields] = await sqlConnection.query(queries['createService'], Object.values(newService));
+        result(null, {id: rows.insertId});
+    }
+    catch(err){
+        console.log("***** ERROR OCCURED ***** ");
+        console.log(err);
+        result(err, null);
+    }
+};
+
+Providers.findDocuments = async (idProvider, idService, result) =>{
+    let queryStr = sqlConnection.format(queries['findDocumentsByProviderId'], idProvider);
+    if(typeof idService !== 'undefined'){
+        let queryStr2 = sqlConnection.format(queries['findDocumentServiceAppend'], idService );
+        queryStr = queryStr.slice(0, -1) + queryStr2;
+    }
+    // let queryStr = queryStr1.slice(0, -1) + queryStr2;
+    // const queryStr = sqlConnection.format(queries['findDocumentsByProviderId'], [idProvider, idService]);
+
+    try{
+        [rows, fields] = await sqlConnection.query(queryStr);
+        result(null, rows);
+    }
+    catch(err){
+        result(err, null);
+        console.log(err);
+    }
+};
+
+Providers.createDocuments = async (idProvider, idService, reqBody, result) =>{
+    const newDocument = new ProviderDocument(reqBody);
+    newDocument.providerId = idProvider;
+    newDocument.providerServiceId = idService;
+
+    try{
+        console.log("*** Adding a new provider and address **** ");
+        var [rows, fields] = await sqlConnection.query(queries['createProviderServiceDocument'], Object.values(newDocument));
+        result(null, {id: rows.insertId});
+    }
+    catch(err){
+        console.log("***** ERROR OCCURED ***** ");
+        console.log(err);
         result(err, null);
     }
 };
