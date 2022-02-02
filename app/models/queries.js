@@ -26,7 +26,10 @@ var queries = {
                         WHERE provider.id=?;`,
     findReviewById: `SELECT * FROM service.provider_review WHERE provider_review.provider_id=?;`,
     createReview: `INSERT INTO service.provider_review (provider_id, overall, behavior, time, service, review) VALUES (?, ?, ?, ?, ?, ?);`,
-    findServiceByProviderId: `SELECT * FROM service.provider_services WHERE service.provider_services.provider_id=?;`,
+    findServiceByProviderId: `SELECT service.provider_services.* , service.services_list.service
+                                FROM service.provider_services 
+                                JOIN service.services_list ON service.provider_services.service_id = service.services_list.id
+                                WHERE service.provider_services.provider_id=?;`,
     createService: `INSERT INTO service.provider_services (provider_id, service_id, experience, status) VALUES (?, ?, ?, ?);`,
     findDocumentsByProviderId: `SELECT service.provider_services.*
                                             , service.services_list.*
