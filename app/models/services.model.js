@@ -1,10 +1,6 @@
 const sqlConnection = require("./db");
 const queries = require('./queries');
-
-//Constructor for Services object
-const Services = function(bodyData){
-    this.service = bodyData.service
-};
+const Services = require('./dbschema/db.schema.services');
 
 Services.create = async ({service}, result) =>{
     try{
@@ -12,7 +8,6 @@ Services.create = async ({service}, result) =>{
         result(null, {id: rows.insertId});
     }
     catch(err){
-        console.log("***** ERROR ENCOUNTERED ***** ");
         console.log(err);
         result(err, null);
     }
