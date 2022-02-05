@@ -1,7 +1,9 @@
-const res = require("express/lib/response");
-const { NULL } = require("mysql/lib/protocol/constants/types");
+const res           = require("express/lib/response");
+const { NULL }      = require("mysql/lib/protocol/constants/types");
 const sqlConnection = require("../models/db");
-const queries = require('./queries');
+const queries       = require('./queries');
+const {encryptPassword, getToken, comparePassword} = require('../security/authCommon')
+
 const {Providers, ProviderAddress, ProviderReview, ProviderService, ProviderDocument} = require("./dbschema/db.schema.providers");
 
 async function executeQuery(result, query, queryParams = []){
@@ -11,19 +13,24 @@ async function executeQuery(result, query, queryParams = []){
     }
     catch(err){
         result(err, null);
-        console.log(err);
     }
 }
 
 Providers.create = async (reqBody, result) =>{
-    const newProvider          = new Providers(reqBody);
+    const newProvider       = new Providers(reqBody);
     const providerAddress   = new ProviderAddress(reqBody);
 
     try{
         console.log("*** Adding a new provider and address **** ");
+        newProvider.password = await encryptPassword(reqBody.password);
+
         await sqlConnection.query(queries['startTransaction']);
         var [rows, fields] = await sqlConnection.query(queries['insertProvider'], Object.values(newProvider));
-        const returnObject = {id: rows.insertId};
+
+        const token = getToken(rows.insertId);
+
+        const returnObject = {id: rows.insertId, token: token};
+
         providerAddress.providerId = rows.insertId;
         [rows, fields] = await sqlConnection.query(queries['insertCity'], [providerAddress.city]);
         [rows, fields] = await sqlConnection.query(queries['insertState'], [providerAddress.state]);
@@ -31,7 +38,7 @@ Providers.create = async (reqBody, result) =>{
         [rows, fields] = await sqlConnection.query(queries['insertAddress'], Object.values(providerAddress));
         await sqlConnection.query(queries['commit']);
 
-        result(null,returnObject);
+        result(null, returnObject);
     }
     catch(err){
         console.log("***** ERROR OCCURED ***** ");
@@ -39,6 +46,36 @@ Providers.create = async (reqBody, result) =>{
         await sqlConnection.query(queries['rollback']);
         result(err, null);
     }
+};
+
+Providers.signin = (reqBody, result) =>{
+    const{username, password} = reqBody;
+    if(!username || !password){
+        return result({message: 'username or password can not be empty'}, null);
+    }
+    async function internalResultFunc (err, rows){
+        if(err){
+            console.log({message: 'internalResultFunc error '} + err);
+            return result(err, null);
+        }
+
+        var queryResult = rows[0];
+
+        try {
+            if(await comparePassword(password, queryResult.password)){
+                result(null, {id: queryResult.id, token: getToken(queryResult.id)});
+            }
+            else{
+                console.log('comparePassword failed!');
+                result({message: 'Inocrrect password'}, null);
+            }
+        }
+        catch(err){
+            result({message: 'Inocrrect password'}, null);
+        }
+    };
+
+    executeQuery(internalResultFunc, queries['selectAllProvidersByUsername'], username);
 };
 
 Providers.getAll = (firstName, result)=>{
@@ -72,7 +109,7 @@ Providers.createService = async (idProvider, reqBody, result) =>{
 
 Providers.findDocuments = async (idProvider, idService, result) =>{
     let queryStr = sqlConnection.format(queries['findDocumentsByProviderId'], idProvider);
-    if(typeof idService !== 'undefined'){
+    if(idService){
         let queryStr2 = sqlConnection.format(queries['findDocumentServiceAppend'], idService );
         queryStr = queryStr.slice(0, -1) + queryStr2;
     }
