@@ -1,17 +1,18 @@
 //Constructor for Provider object
 const Providers = function(bodyData){
-    this.firstName              = bodyData.firstName
-    this.lastName               = bodyData.lastName
-    this.middleName             = bodyData.middleName
-    this.workRadius             = bodyData.workRadius
-    this.status                 = bodyData.status
-    this.cnic                   = bodyData.cnic
-    this.userName               = bodyData.userName
-    this.dateOfBirth            = bodyData.dateOfBirth
-    this.photo                  = bodyData.photo
-    this.phoneNumber1           = bodyData.phoneNumber1
-    this.phoneNumber2           = bodyData.phoneNumber2
-    this.briefDescription       = bodyData.briefDescription
+    this.firstName              = bodyData.firstName,
+    this.lastName               = bodyData.lastName,
+    this.middleName             = bodyData.middleName,
+    this.password               = null,
+    this.workRadius             = bodyData.workRadius,
+    this.status                 = bodyData.status,
+    this.cnic                   = bodyData.cnic,
+    this.userName               = bodyData.userName,
+    this.dateOfBirth            = bodyData.dateOfBirth,
+    this.photo                  = bodyData.photo,
+    this.phoneNumber1           = bodyData.phoneNumber1,
+    this.phoneNumber2           = bodyData.phoneNumber2,
+    this.briefDescription       = bodyData.briefDescription,
     this.detailedDescription    = bodyData.detailedDescription
 };
 
