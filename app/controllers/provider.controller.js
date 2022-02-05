@@ -3,7 +3,7 @@ const {Providers} = require("../models/provider.model");
 function errorCallback (res, err, data){
     if(err){
         res.status(400).send({
-            message: err.sqlMessage || "Some error occured while creating a new Service Provider."
+            message: err.sqlMessage || err.message || err
         });
     }
     else{
@@ -23,6 +23,11 @@ function checkBadRequest(data, res){
 exports.create = (req, res) =>{
     if(checkBadRequest(req.body, res)) return;
     Providers.create(req.body, errorCallback.bind(this, res));
+}
+
+exports.signin = (req, res) =>{
+    if(checkBadRequest(req.body, res)) return;
+    Providers.signin(req.body, errorCallback.bind(this, res));
 }
 
 exports.findAll = (req, res) =>{
