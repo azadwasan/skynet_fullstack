@@ -5,8 +5,8 @@ var queries = {
 
     insertProvider: `INSERT INTO 
                     service.provider
-                    (first_name, last_name, middle_name, work_radius, status, cnic, username, date_of_birth, photo, phone_number_1, phone_number_2, brief_description, detailed_description)
-                    VALUES (?, ?, ?, IFNULL(?,DEFAULT(work_radius)), IFNULL(?,DEFAULT(status)), ?, ?, ?, IFNULL(?,DEFAULT(photo)), ?, IFNULL(?,DEFAULT(phone_number_2)), ?, IFNULL(?,DEFAULT(detailed_description)));`,
+                    (first_name, last_name, middle_name, password, work_radius, status, cnic, username, date_of_birth, photo, phone_number_1, phone_number_2, brief_description, detailed_description)
+                    VALUES (?, ?, ?, ?, IFNULL(?,DEFAULT(work_radius)), IFNULL(?,DEFAULT(status)), ?, ?, ?, IFNULL(?,DEFAULT(photo)), ?, IFNULL(?,DEFAULT(phone_number_2)), ?, IFNULL(?,DEFAULT(detailed_description)));`,
     insertCity:     `INSERT IGNORE INTO service.city(city) VALUES(?);`,
     insertState:    `INSERT IGNORE INTO service.state(state) VALUES(?);`,
     insertCountry:  `INSERT IGNORE INTO service.country(country) VALUES(?);`,
@@ -18,6 +18,7 @@ var queries = {
                     (SELECT state.id FROM service.state WHERE state.state=?),
                     (SELECT country.id FROM service.country WHERE country.country=?));`,
     selectAllProviders: `SELECT * from provider;`,
+    selectAllProvidersByUsername: `SELECT * FROM service.provider WHERE provider.username=?;`,
     findProviderById: `SELECT service.provider.*, service.provider_address.*, service.city.city, service.state.state, service.country.country FROM service.provider
                         INNER JOIN service.provider_address ON service.provider.id=provider_address.provider_id
                         INNER JOIN service.city ON service.provider_address.city = service.city.id
@@ -32,13 +33,12 @@ var queries = {
                                 WHERE service.provider_services.provider_id=?;`,
     createService: `INSERT INTO service.provider_services (provider_id, service_id, experience, status) VALUES (?, ?, ?, ?);`,
     findDocumentsByProviderId: `SELECT service.provider_services.*
-                                            , service.services_list.*
-                                            , service.qualification_documents.*
-                                        FROM 	service.provider_services
-                                        JOIN 	service.services_list ON service.provider_services.service_id=service.services_list.id
-                                        JOIN 	service.qualification_documents ON service.provider_services.id = service.qualification_documents.provider_service_id	
-                                        WHERE service.provider_services.provider_id = ? 
-                                        ;`,
+                                    , service.services_list.*
+                                    , service.qualification_documents.*
+                                FROM 	service.provider_services
+                                JOIN 	service.services_list ON service.provider_services.service_id=service.services_list.id
+                                JOIN 	service.qualification_documents ON service.provider_services.id = service.qualification_documents.provider_service_id	
+                                WHERE service.provider_services.provider_id = ?;`,
     findDocumentServiceAppend: `AND	service.provider_services.service_id = ?;`,
     createProviderServiceDocument: `INSERT 	INTO service.qualification_documents (provider_service_id, document, document_name) 
                                     VALUES ((SELECT service.provider_services.id FROM service.provider_services WHERE service.provider_services.provider_id=? AND service.provider_services.service_id=?), ?, ?);`,
