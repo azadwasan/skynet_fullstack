@@ -4,7 +4,8 @@ module.exports = app =>{
     var router = require("express").Router();
     
     //Create a new Service provider
-    router.post("/", provider.create);
+    router.post("/signup", provider.create);
+    router.get("/signin", provider.signin);
 
     //Retrieve all tutorials
     router.get("/", provider.findAll);
