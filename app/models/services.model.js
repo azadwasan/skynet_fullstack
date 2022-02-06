@@ -1,4 +1,4 @@
-const sqlConnection = require("./db");
+const {sqlConnection} = require("../common/db");
 const queries = require('./queries');
 const Services = require('./dbschema/db.schema.services');
 
