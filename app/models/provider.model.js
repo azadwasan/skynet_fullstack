@@ -1,20 +1,10 @@
 const res           = require("express/lib/response");
 const { NULL }      = require("mysql/lib/protocol/constants/types");
-const sqlConnection = require("../models/db");
+const {sqlConnection, executeQuery} = require("../common/db");
 const queries       = require('./queries');
-const {encryptPassword, getToken, comparePassword} = require('../security/authCommon')
+const {encryptPassword, getToken, comparePassword} = require('../common/authCommon')
 
 const {Providers, ProviderAddress, ProviderReview, ProviderService, ProviderDocument} = require("./dbschema/db.schema.providers");
-
-async function executeQuery(result, query, queryParams = []){
-    try{
-        [rows, fields] = await sqlConnection.query(query, queryParams);
-        result(null, rows);
-    }
-    catch(err){
-        result(err, null);
-    }
-}
 
 Providers.create = async (reqBody, result) =>{
     const newProvider       = new Providers(reqBody);
@@ -75,7 +65,7 @@ Providers.signin = (reqBody, result) =>{
         }
     };
 
-    executeQuery(internalResultFunc, queries['selectAllProvidersByUsername'], username);
+    executeQuery(internalResultFunc, queries['selectProvidersByUsername'], username);
 };
 
 Providers.getAll = (firstName, result)=>{
