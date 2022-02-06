@@ -1,5 +1,6 @@
 const mySQL = require("mysql2/promise");
 const dbConfig = require("../config/db.config");
+const queries = require("../models/queries");
 
 /*const connection = async config => {
     const dbSocketPath = process.env.DB_SOCKET_PATH || '/cloudsql';
@@ -41,7 +42,7 @@ var connection = mySQL.createPool({
     });
 */
 
-var connectionPool = mySQL.createPool({
+var sqlConnection = mySQL.createPool({
     host : dbConfig.HOST,
     user : dbConfig.USER,
     password : dbConfig.PASSWORD,
@@ -50,4 +51,22 @@ var connectionPool = mySQL.createPool({
   });
 // const promisePool = connectionPool.promise();
 
-module.exports = connectionPool;
+async function executeQuery(result, query, queryParams = []){
+  try{
+      [rows, fields] = await sqlConnection.query(query, queryParams);
+      result(null, rows);
+  }
+  catch(err){
+      result(err, null);
+  }
+}
+
+function localResultFunc(err, resultRows){
+  return err?null:resultRows;
+}
+
+function findProviderById(userId){
+  return executeQuery(localResultFunc, queries['findProviderById'], userId);
+}
+
+module.exports = {sqlConnection, executeQuery, findProviderById};
