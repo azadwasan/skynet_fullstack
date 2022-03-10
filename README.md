@@ -20,4 +20,4 @@ Skynet has the following major components
 * Backend
     The backend consists of MySQL database. The backend server has been implemented in Express.js
 
-Current Repository: This specific repository is the backend of the Skynet platform. It was initially developed in my own company's account "amzdevs". It has now been forked into my personal account and from now on the development of both front-ends and the backends will continue on my personal GitHub account.
+Current Repository: This specific repository is the backend of the Skynet platform. It was initially developed in my own company's account "amzpak". It has now been forked into my personal account and from now on the development of both front-ends and the backends will continue on my personal GitHub account.
