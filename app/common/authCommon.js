@@ -1,6 +1,6 @@
 const bcrypt        = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = "A VERY SECRET KEY";
+const jwt           = require('jsonwebtoken');
+const SECRET_KEY    = "A VERY SECRET KEY";
 
 function encryptPassword(password){
     return new Promise((resolve, reject)=>{
@@ -41,4 +41,9 @@ function comparePassword(candidatePassword, savedPassword){
     });
 }
 
-module.exports = {encryptPassword, getToken, comparePassword};
+function authorizeUser(authorization, verifyCB){
+    const token = authorization.replace('Bearer ', '');
+    jwt.verify(token, SECRET_KEY, verifyCB);
+}
+
+module.exports = {encryptPassword, getToken, comparePassword, authorizeUser};

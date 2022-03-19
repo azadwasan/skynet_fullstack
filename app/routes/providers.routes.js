@@ -1,3 +1,5 @@
+const requireAuth = require('../middlewares/requireAuth');
+
 module.exports = app =>{
     const provider = require("../controllers/provider.controller");
 
@@ -5,12 +7,12 @@ module.exports = app =>{
     
     //Create a new Service provider
     router.post("/signup", provider.create);
-    router.get("/signin", provider.signin);
+    router.post("/signin", provider.signin);
 
     //Retrieve all tutorials
     router.get("/", provider.findAll);
 
-    router.get("/:id", provider.findOne);
+    router.get("/:id", requireAuth, provider.findOne);
 
     router.get("/:id/reviews", provider.findReviews);
     router.post("/:id/reviews", provider.createReview);

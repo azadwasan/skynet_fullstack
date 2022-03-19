@@ -18,8 +18,14 @@ var queries = {
                     (SELECT state.id FROM service.state WHERE state.state=?),
                     (SELECT country.id FROM service.country WHERE country.country=?));`,
     selectAllProviders: `SELECT * from provider;`,
-    selectAllProvidersByUsername: `SELECT * FROM service.provider WHERE provider.username=?;`,
-    findProviderById: `SELECT service.provider.*, service.provider_address.*, service.city.city, service.state.state, service.country.country FROM service.provider
+    selectProvidersByUsername: `SELECT * FROM service.provider WHERE provider.username=?;`,
+    findProviderById: `SELECT service.provider.*, 
+                        service.provider_address.type, 
+                        service.provider_address.address_row_1, service.provider_address.address_row_2,  service.provider_address.address_row_3, 
+                        service.provider_address.postal_code, 
+                        service.provider_address.latitude, 
+                        service.provider_address.longitude, 
+                        service.city.city, service.state.state, service.country.country FROM service.provider
                         INNER JOIN service.provider_address ON service.provider.id=provider_address.provider_id
                         INNER JOIN service.city ON service.provider_address.city = service.city.id
                         INNER JOIN service.state ON service.provider_address.state = service.state.id
