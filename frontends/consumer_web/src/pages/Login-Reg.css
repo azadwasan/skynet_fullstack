@@ -1,0 +1,43 @@
+.het {
+  height: 100vh;
+}
+.btn-google {
+  background-color: #ff6666;
+  color: white;
+  font-weight: 500;
+  width: 100%;
+}
+.btn-fb {
+  background-color: #1e80ff;
+  color: white;
+  font-weight: 500;
+  width: 100%;
+}
+.btn-app {
+  background-color: #000000;
+  color: white;
+  font-weight: 500;
+  width: 100%;
+}
+
+.stl_121 {
+  border-radius: 27px;
+  background: #fff;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.1);
+  width: 460px;
+}
+
+.custom_91 {
+  font-size: 25px;
+}
+.inder_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.margin_423 {
+  margin-top: -60px;
+  margin-bottom: 25px;
+}

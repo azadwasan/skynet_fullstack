@@ -1,0 +1,52 @@
+.heart_icon {
+  width: 24px;
+  cursor: pointer;
+}
+.star_icon {
+  width: 19px;
+  color: #ffb100;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 12px;
+  grid-row-gap: 14px;
+}
+
+@media screen and (max-width: 1400px) {
+  .parent {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .parent {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .parent {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+  .res_mobile {
+    height: 280px;
+  }
+}
+@media screen and (max-width: 576px) {
+  .parent {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 450px) {
+  .parent {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+}

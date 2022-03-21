@@ -1,0 +1,22 @@
+.header {
+  position: fixed;
+  left: 0px;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+.header-shadow {
+  box-shadow: 0px 3px 6px rgb(0 0 0 / 16%);
+  transform-origin: 50% 0% !important;
+  transition: -ms-transform 150ms ease 0s, -webkit-transform 150ms ease 0s,
+    transform 150ms ease 0s, opacity 150ms ease 75ms !important;
+  background: rgb(255, 255, 255);
+  color: white !important;
+}
+
+.styl32 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0px 20px;
+}

@@ -1,0 +1,19 @@
+.App {
+  height: 100vh;
+}
+.banner-div {
+  height: 740px;
+  color: white;
+}
+.slick-slide img {
+  margin: auto;
+}
+
+.heading_sec {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-item {
+  list-style: none;
+}

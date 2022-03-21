@@ -1,0 +1,57 @@
+.banner {
+  position: relative;
+  color: white;
+  height: 740px;
+}
+.banner-input {
+  width: 80%;
+  height: 60px;
+  display: flex;
+  margin: 0 auto;
+}
+.banner-heading {
+  text-align: center;
+  font-size: 65px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.input-style {
+  outline: none;
+  padding: 0px 15px;
+  font-size: 20px;
+}
+
+/* //Slider css */
+
+.swiper-button-prev:after {
+  content: "prev";
+  font-size: 28px !important;
+  font-weight: 900 !important;
+}
+.swiper-button-prev,
+.swiper-rtl .swiper-button-next {
+  left: 10px;
+  right: auto;
+  background: white !important;
+  color: #293461 !important;
+  font-weight: 600 !important;
+  padding: 25px 25px !important;
+  border-radius: 100%;
+}
+
+.swiper-button-next:after {
+  content: "next";
+  font-size: 28px !important;
+  font-weight: 900 !important;
+}
+.swiper-button-next,
+.swiper-rtl .swiper-button-next {
+  left: 10px;
+  right: auto;
+  background: white !important;
+  color: #293461 !important;
+  font-weight: 600 !important;
+  padding: 25px 25px !important;
+  border-radius: 100%;
+}
